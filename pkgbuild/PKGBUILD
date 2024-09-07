@@ -1,0 +1,48 @@
+# Maintainer: Tales A. Mendonça <talesam@gmail.com>
+
+pkgname=xfce4-panel-profiles
+pkgdesc="Simple application to manage Xfce panel layouts"
+# Uncomment and edit the following lines as needed
+depends=('xfce4-panel' 'python-gobject')
+makedepends=('intltool')
+#optdepends=('')
+conflicts=('xfpanel-switch')
+#provides=('')
+replaces=('xfpanel-switch')
+pkgver=$(date +%y.%m.%d)
+pkgrel=$(date +%H%M)
+arch=('any')
+license=('GPL3')
+url="https://github.com/communitybig/${pkgname}"
+source=("git+${url}.git")
+md5sums=('SKIP')
+
+# Automatically detect and use the correct install file
+if [ -e "${pkgname}.install" ]; then
+    install=${pkgname}.install
+elif [ -e "pkgbuild.install" ]; then
+    install=pkgbuild.install
+fi
+
+prepare() {
+    cd "${srcdir}/${pkgname}"
+    # Add any preparation steps here, if needed
+    # For example: patch -p1 < "${srcdir}/patch-file.patch"
+}
+
+build() {
+    cd "${srcdir}/${pkgname}"
+    ./configure --prefix=/usr --python=python
+    make
+}
+
+check() {
+    cd "${srcdir}/${pkgname}"
+    # Add check/test steps here, if needed
+    # For example: make check
+}
+
+package() {
+    cd "${srcdir}/${pkgname}"
+    make install DESTDIR="${pkgdir}"
+}
